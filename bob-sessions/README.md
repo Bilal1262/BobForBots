@@ -1,12 +1,10 @@
-# IBM Bob session exports
+# IBM Bob Session Reports
 
-| Session | What Bob Did | Bob Feature Used | Demo Step |
-|---------|-------------|-----------------|-----------|
-| session_01 | Created custom_modes.yaml and all rules files | Plan + Code mode | Setup |
-| session_02 | Built MCP server server.py with all 6 tools | Code + Advanced mode | Setup |
-| session_03 | Generated demo workspace packages with seeded faults | Code mode | Setup |
-| session_04 | Diagnosed fault scenario 1 using parse_diagnostics + read_bag | Orchestrator + MCP + Recovery mode | Demo |
-| session_05 | Generated package documentation for all 4 packages | Docs Architect mode | Demo |
-| session_06 | Ran safety review — found CRITICAL and WARNING issues | Safety Reviewer mode | Demo |
+Exported session reports for every Bob task used in BobForBot.
 
-Each `.json` session file is the exported IBM Bob session report. Open them to see every prompt, tool call, and response.
+| File | Mode Used | What Bob Did | Demo Step |
+|------|-----------|-------------|-----------|
+| bob_session_01_architecture.md | ROS2 Architect | Complete workspace architecture overview — all 4 packages, failure modes, data flow | Repo Whisperer |
+| bob_session_02_fault_diagnosis.md | ROS2 Recovery Engineer | Diagnosed odometry loss fault from rosbag, traced to line 27, applied fix, wrote test | Fault Diagnosis |
+| bob_session_03_documentation.md | ROS2 Docs Architect | Generated complete README with mermaid graph, topic table, parameter table, runbook | Living Docs |
+| bob_session_04_safety_review.md | ROS2 Safety Reviewer | Found 2 issues (1 CRITICAL QoS bug, 1 WARNING lifecycle) across 8 safety checks | Safety Review |
