@@ -1,0 +1,4 @@
+# Dashboard + Groq narration (install alongside bobpilot-ros2-mcp/requirements.txt as needed)
+streamlit>=1.31.0
+pandas>=2.0.0
+groq>=0.4.0

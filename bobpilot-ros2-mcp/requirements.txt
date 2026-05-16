@@ -1,0 +1,12 @@
+# -----------------------------------------------------------------------------
+# rosbag2_py and rclpy ship with your ROS 2 distro — install via apt/rosdep,
+# not pip. Before running the MCP server or demo scripts, source ROS 2, e.g.:
+#
+#   source /opt/ros/humble/setup.bash
+#
+# Then create a venv if desired and: pip install -r requirements.txt
+# -----------------------------------------------------------------------------
+mcp>=1.0.0
+fastmcp>=0.1.0
+pyyaml>=6.0
+groq>=0.4.0

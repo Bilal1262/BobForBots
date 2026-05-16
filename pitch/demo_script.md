@@ -1,0 +1,25 @@
+# BobForBot — 5-minute demo script
+
+## 0:00-0:30 Hook
+
+"This is a real fault from a real robot. In 30 seconds, IBM Bob will find it." Show the fault log. Show the codebase. The engineer is lost.
+
+## 0:30-1:30 Problem
+
+Explain the ROS 2 codebase complexity problem. Four packages. Hundreds of nodes in a real system. New engineer takes six weeks to onboard. Fault diagnosis takes hours. Quote the $80,000 onboarding cost statistic.
+
+## 1:30-2:30 Repo Whisperer demo
+
+Ask Bob "How does odometry monitoring work in this system?" Show Bob calling `inspect_graph` via MCP, tracing through the packages, giving a grounded answer with file citations. Highlight: Bob is using the `ros2-architect` custom mode automatically.
+
+## 2:30-4:00 Black Box Analyst demo (the wow moment)
+
+Type `/diagnose-mission logs/fault_scenario_1_odom_loss/` in BobShell (rosbag2 **folder**; create with `python3 scripts/synth_fault_bag.py` after `source /opt/ros/humble/setup.bash`). Watch Orchestrator dispatch to recovery-engineer mode. Watch MCP tools called: `parse_diagnostics` first, then `read_bag`. Watch Bob identify the uninitialised `self.last_odom_time` bug at the exact file and line. Watch Bob propose a fix plan, wait for approval, apply the fix, write a test, open a pull request. This takes under 90 seconds.
+
+## 4:00-4:30 Living Docs + Safety Review
+
+Thirty-second montage. Bob generates the full README for `odometry_health_monitor` in 15 seconds. Bob runs safety review on `safety_manager.cpp`, flags CRITICAL QoS issue and missing try/catch. Show the Bobalytics cost: under $0.30.
+
+## 4:30-5:00 Close
+
+Market size ($29.6B robot software market). Any ROS 2 repo, any robot, drop in the `.bob/` pack. Open source MIT. GitHub link.

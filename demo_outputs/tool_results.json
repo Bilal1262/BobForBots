@@ -1,0 +1,501 @@
+{
+  "inspect_graph": {
+    "success": true,
+    "workspace": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace",
+    "package_count": 4,
+    "packages": [
+      {
+        "package": "motion_controller",
+        "path": "motion_controller",
+        "python_files": [
+          "src/motion_controller/launch/motion_controller.launch.py"
+        ],
+        "cpp_files": [
+          "src/motion_controller/include/motion_controller/motion_controller.hpp",
+          "src/motion_controller/src/motion_controller.cpp"
+        ],
+        "publishers": [
+          "/safe_cmd_vel"
+        ],
+        "subscribers": [
+          "/cmd_vel"
+        ]
+      },
+      {
+        "package": "odometry_health_monitor",
+        "path": "odometry_health_monitor",
+        "python_files": [
+          "src/odometry_health_monitor/launch/odometry_health_monitor.launch.py",
+          "src/odometry_health_monitor/odometry_health_monitor/__init__.py",
+          "src/odometry_health_monitor/odometry_health_monitor/odometry_health_monitor_node.py",
+          "src/odometry_health_monitor/setup.py",
+          "src/odometry_health_monitor/test/test_watchdog.py"
+        ],
+        "cpp_files": [],
+        "publishers": [
+          "/cmd_vel",
+          "/diagnostics",
+          "/odom"
+        ],
+        "subscribers": [
+          "/diagnostics",
+          "/odom"
+        ]
+      },
+      {
+        "package": "safety_manager",
+        "path": "safety_manager",
+        "python_files": [
+          "src/safety_manager/launch/safety_manager.launch.py"
+        ],
+        "cpp_files": [
+          "src/safety_manager/include/safety_manager/safety_manager.hpp",
+          "src/safety_manager/src/safety_manager.cpp"
+        ],
+        "publishers": [],
+        "subscribers": [
+          "/diagnostics",
+          "/emergency_stop"
+        ]
+      },
+      {
+        "package": "task_supervisor",
+        "path": "task_supervisor",
+        "python_files": [
+          "src/task_supervisor/launch/task_supervisor.launch.py",
+          "src/task_supervisor/setup.py",
+          "src/task_supervisor/task_supervisor/__init__.py",
+          "src/task_supervisor/task_supervisor/task_list.py",
+          "src/task_supervisor/task_supervisor/task_supervisor_node.py"
+        ],
+        "cpp_files": [],
+        "publishers": [
+          "/task_status"
+        ],
+        "subscribers": []
+      }
+    ]
+  },
+  "lint_launch": {
+    "success": true,
+    "launch_file": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace/src/odometry_health_monitor/launch/odometry_health_monitor.launch.py",
+    "nodes": [
+      {
+        "name": "odometry_health_monitor",
+        "package": null,
+        "executable": "odometry_health_monitor_node",
+        "namespace": null,
+        "parameters": [],
+        "remappings": [],
+        "respawn": null,
+        "respawn_delay": null
+      }
+    ],
+    "issues": [
+      "Node 'odometry_health_monitor' launched without explicit namespace \u2014 may collide.",
+      "use_sim_time not referenced \u2014 confirm whether simulation time is required."
+    ]
+  },
+  "get_params": {
+    "success": true,
+    "workspace": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace",
+    "parameters": [
+      {
+        "parameter": "max_angular_vel",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "motion_controller"
+        ]
+      },
+      {
+        "parameter": "max_linear_vel",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "motion_controller"
+        ]
+      },
+      {
+        "parameter": "motion_controller.ros__parameters.max_angular_vel",
+        "declared_default": null,
+        "yaml_override": 1.0,
+        "yaml_files": [
+          "src/motion_controller/config/params.yaml"
+        ],
+        "packages": [
+          "motion_controller"
+        ]
+      },
+      {
+        "parameter": "motion_controller.ros__parameters.max_linear_vel",
+        "declared_default": null,
+        "yaml_override": 0.3,
+        "yaml_files": [
+          "src/motion_controller/config/params.yaml"
+        ],
+        "packages": [
+          "motion_controller"
+        ]
+      },
+      {
+        "parameter": "odom_timeout_sec",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "odometry_health_monitor"
+        ]
+      },
+      {
+        "parameter": "odometry_health_monitor.ros__parameters.odom_timeout_sec",
+        "declared_default": null,
+        "yaml_override": 1.0,
+        "yaml_files": [
+          "src/odometry_health_monitor/config/params.yaml"
+        ],
+        "packages": [
+          "odometry_health_monitor"
+        ]
+      },
+      {
+        "parameter": "odometry_health_monitor.ros__parameters.stop_on_timeout",
+        "declared_default": null,
+        "yaml_override": true,
+        "yaml_files": [
+          "src/odometry_health_monitor/config/params.yaml"
+        ],
+        "packages": [
+          "odometry_health_monitor"
+        ]
+      },
+      {
+        "parameter": "publish_rate_hz",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "safety_manager"
+        ]
+      },
+      {
+        "parameter": "retry_count",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "task_supervisor"
+        ]
+      },
+      {
+        "parameter": "safety_manager.ros__parameters.publish_rate_hz",
+        "declared_default": null,
+        "yaml_override": 10.0,
+        "yaml_files": [
+          "src/safety_manager/config/params.yaml"
+        ],
+        "packages": [
+          "safety_manager"
+        ]
+      },
+      {
+        "parameter": "safety_manager.ros__parameters.safety_timeout_sec",
+        "declared_default": null,
+        "yaml_override": 0.5,
+        "yaml_files": [
+          "src/safety_manager/config/params.yaml"
+        ],
+        "packages": [
+          "safety_manager"
+        ]
+      },
+      {
+        "parameter": "safety_timeout_sec",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "safety_manager"
+        ]
+      },
+      {
+        "parameter": "stop_on_timeout",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "odometry_health_monitor"
+        ]
+      },
+      {
+        "parameter": "task_supervisor.ros__parameters.retry_count",
+        "declared_default": null,
+        "yaml_override": 3,
+        "yaml_files": [
+          "src/task_supervisor/config/params.yaml"
+        ],
+        "packages": [
+          "task_supervisor"
+        ]
+      },
+      {
+        "parameter": "task_supervisor.ros__parameters.task_timeout_sec",
+        "declared_default": null,
+        "yaml_override": 30.0,
+        "yaml_files": [
+          "src/task_supervisor/config/params.yaml"
+        ],
+        "packages": [
+          "task_supervisor"
+        ]
+      },
+      {
+        "parameter": "task_timeout_sec",
+        "declared_default": "(see source)",
+        "yaml_override": null,
+        "yaml_files": [],
+        "packages": [
+          "task_supervisor"
+        ]
+      },
+      {
+        "parameter": "tasks",
+        "declared_default": null,
+        "yaml_override": [
+          {
+            "task_id": "goto_A",
+            "task_type": "navigate",
+            "goal_x": 1.0,
+            "goal_y": 0.5,
+            "timeout_sec": 30.0
+          },
+          {
+            "task_id": "goto_B",
+            "task_type": "navigate",
+            "goal_x": 2.0,
+            "goal_y": -0.25,
+            "timeout_sec": 30.0
+          },
+          {
+            "task_id": "goto_C",
+            "task_type": "navigate",
+            "goal_x": 0.0,
+            "goal_y": 0.0,
+            "timeout_sec": 30.0
+          }
+        ],
+        "yaml_files": [
+          "src/task_supervisor/config/tasks.yaml"
+        ],
+        "packages": [
+          "task_supervisor"
+        ]
+      }
+    ],
+    "count": 17
+  },
+  "diff_packages": {
+    "success": true,
+    "workspace": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace",
+    "since": "HEAD~1",
+    "changed_files": [],
+    "changed_packages": [],
+    "topic_changes": {
+      "added_publishers": [],
+      "removed_publishers": [],
+      "added_subscribers": [],
+      "removed_subscribers": []
+    }
+  },
+  "parse_diagnostics": {
+    "success": true,
+    "faults": [
+      {
+        "timestamp": 1778886127.6797857,
+        "hardware_id": "odometry",
+        "level": 1,
+        "message": "odometry stale",
+        "values": {
+          "age_sec": "1.200"
+        }
+      },
+      {
+        "timestamp": 1778886128.1797857,
+        "hardware_id": "odometry",
+        "level": 2,
+        "message": "odometry lost \u2014 mission fault",
+        "values": {}
+      }
+    ],
+    "faults_by_hardware_id": {
+      "odometry": [
+        {
+          "timestamp": 1778886127.6797857,
+          "hardware_id": "odometry",
+          "level": 1,
+          "message": "odometry stale",
+          "values": {
+            "age_sec": "1.200"
+          }
+        },
+        {
+          "timestamp": 1778886128.1797857,
+          "hardware_id": "odometry",
+          "level": 2,
+          "message": "odometry lost \u2014 mission fault",
+          "values": {}
+        }
+      ]
+    },
+    "summary": "Found 1 WARN-level and 1 ERROR-level diagnostic statuses across 2 fault records. Time range ~1778886125.380s to 1778886128.180s.",
+    "warn_count": 1,
+    "error_count": 1
+  },
+  "read_bag": {
+    "success": true,
+    "bag": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace/logs/fault_scenario_1_odom_loss",
+    "topic": "/odom",
+    "message_type": "nav_msgs/msg/Odometry",
+    "window": {
+      "start_sec": 0.0,
+      "duration_sec": 5.0
+    },
+    "messages": [
+      {
+        "timestamp_ns": 1778886125479785728,
+        "data": {
+          "header": {
+            "stamp": {
+              "sec": 1778886125,
+              "nanosec": 479785728
+            },
+            "frame_id": "odom"
+          },
+          "child_frame_id": "",
+          "pose": {
+            "pose": {
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          },
+          "twist": {
+            "twist": {
+              "linear": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "angular": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          }
+        }
+      },
+      {
+        "timestamp_ns": 1778886125579785728,
+        "data": {
+          "header": {
+            "stamp": {
+              "sec": 1778886125,
+              "nanosec": 579785728
+            },
+            "frame_id": "odom"
+          },
+          "child_frame_id": "",
+          "pose": {
+            "pose": {
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          },
+          "twist": {
+            "twist": {
+              "linear": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "angular": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          }
+        }
+      },
+      {
+        "timestamp_ns": 1778886125679785728,
+        "data": {
+          "header": {
+            "stamp": {
+              "sec": 1778886125,
+              "nanosec": 679785728
+            },
+            "frame_id": "odom"
+          },
+          "child_frame_id": "",
+          "pose": {
+            "pose": {
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          },
+          "twist": {
+            "twist": {
+              "linear": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "angular": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              }
+            },
+            "covariance": "array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,\n       0., 0.])"
+          }
+        }
+      }
+    ],
+    "truncated": false
+  }
+}

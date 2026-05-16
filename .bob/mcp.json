@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "bobpilot-ros2": {
+      "command": "python3",
+      "args": ["/home/bb/hackathon/IBM/BobForBot/bobpilot-ros2-mcp/server.py"],
+      "env": {
+        "ROS_WORKSPACE": "/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace"
+      },
+      "alwaysAllow": [
+        "inspect_graph",
+        "read_bag",
+        "parse_diagnostics",
+        "lint_launch",
+        "get_params",
+        "diff_packages"
+      ],
+      "disabled": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "bobpilot-ros2": {
+      "command": "python",
+      "args": ["../../bobpilot-ros2-mcp/server.py"],
+      "env": {
+        "ROS_WORKSPACE": "${workspaceFolder}/demo-robot-workspace",
+        "GROQ_API_KEY": ""
+      },
+      "alwaysAllow": [
+        "inspect_graph",
+        "read_bag",
+        "parse_diagnostics",
+        "lint_launch",
+        "get_params",
+        "diff_packages",
+        "narrate_fault_report"
+      ],
+      "disabled": false
+    }
+  }
+}
