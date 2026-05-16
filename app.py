@@ -8,6 +8,7 @@ Theme: `.streamlit/config.toml` (dark base). Run from repo root:
   streamlit run app.py
 
 Data: demo_outputs/tool_results.json (bobpilot-ros2-mcp/demo_run.py).
+Proof trail: export IBM Bob sessions to bob-sessions/*.md; generated READMEs in docs/*.md.
 """
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ import streamlit.components.v1 as components
 
 ROOT = Path(__file__).resolve().parent
 MCP_DIR = ROOT / "bobpilot-ros2-mcp"
+BOB_SESSIONS_DIR = ROOT / "bob-sessions"
+DOCS_DIR = ROOT / "docs"
 sys.path.insert(0, str(MCP_DIR))
 
 RESULTS_PATH = ROOT / "demo_outputs" / "tool_results.json"
@@ -46,6 +49,26 @@ def load_tool_results() -> dict[str, Any]:
         return json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
+
+
+def _is_under_root(path: Path) -> bool:
+    try:
+        path.resolve().relative_to(ROOT.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def list_session_markdowns() -> list[Path]:
+    if not BOB_SESSIONS_DIR.is_dir():
+        return []
+    return sorted(BOB_SESSIONS_DIR.glob("*.md"), key=lambda p: p.name.lower())
+
+
+def list_docs_markdowns() -> list[Path]:
+    if not DOCS_DIR.is_dir():
+        return []
+    return sorted(DOCS_DIR.glob("*.md"), key=lambda p: p.name.lower())
 
 
 def topic_graph_mermaid(inspect: dict[str, Any]) -> str:
@@ -225,7 +248,7 @@ def render_hero(title: str, subtitle: str, status_pill: str) -> None:
   <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
     <div>
       <h1>{title}</h1>
-      <p style="margin:0; color:#94a3b8; max-width:42rem;">{subtitle}</p>
+      <p style="margin:0; color:#94a3b8; max-width:46rem;">{subtitle}</p>
     </div>
     <div style="align-self:center;"><span class="bf-pill">{status_pill}</span></div>
   </div>
@@ -245,6 +268,7 @@ def main() -> None:
     inspect = results.get("inspect_graph") or {}
     diag = results.get("parse_diagnostics") or {}
     read_bag = results.get("read_bag") or {}
+    diff_p = results.get("diff_packages") or {}
 
     st.sidebar.markdown("### Navigation")
     page = st.sidebar.radio(
@@ -254,18 +278,20 @@ def main() -> None:
             "Fault Diagnosis",
             "Node Graph",
             "Safety Review",
+            "Docs Generator",
             "Ask Bob",
         ],
         label_visibility="collapsed",
     )
     st.sidebar.divider()
-    st.sidebar.caption("Load `demo_outputs/tool_results.json` via `bobpilot-ros2-mcp/demo_run.py` + optional `scripts/synth_fault_bag.py`.")
+    st.sidebar.caption("MCP JSON: `demo_outputs/tool_results.json` (`bobpilot-ros2-mcp/demo_run.py`).")
+    st.sidebar.caption("Bob proof: export sessions to `bob-sessions/*.md`; generated docs in `docs/*.md`.")
     st.sidebar.caption("Theme: `.streamlit/config.toml` — restart Streamlit after edits.")
 
     if page == "Mission Control":
         render_hero(
             "Mission control",
-            "Workspace topology snapshot: packages, topic endpoints, and bag-level diagnostic fault count.",
+            "MCP `inspect_graph` + `diff_packages`: workspace topology and recent git-scoped ROS graph deltas.",
             status,
         )
         c1, c2, c3, c4 = st.columns(4)
@@ -284,41 +310,52 @@ def main() -> None:
 
         left, right = st.columns((1, 1.15))
         with left:
-            st.markdown('<div class="bf-panel">', unsafe_allow_html=True)
-            st.markdown("**Workspace root**")
-            st.code(inspect.get("workspace") or "(run demo_run.py)", language="text")
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("##### inspect_graph · workspace")
+            with st.container(border=True):
+                st.code(inspect.get("workspace") or "(run demo_run.py)", language="text")
+                if pkgs:
+                    st.dataframe(
+                        pd.DataFrame(
+                            [
+                                {
+                                    "Package": p.get("package"),
+                                    "Publishers": len(p.get("publishers") or []),
+                                    "Subscribers": len(p.get("subscribers") or []),
+                                }
+                                for p in pkgs
+                            ]
+                        ),
+                        use_container_width=True,
+                        height=min(300, 56 + 36 * len(pkgs)),
+                        hide_index=True,
+                    )
+                else:
+                    st.info("No `inspect_graph` packages yet.")
+
         with right:
-            if pkgs:
-                st.dataframe(
-                    pd.DataFrame(
-                        [
-                            {
-                                "Package": p.get("package"),
-                                "Publishers": len(p.get("publishers") or []),
-                                "Subscribers": len(p.get("subscribers") or []),
-                            }
-                            for p in pkgs
-                        ]
-                    ),
-                    use_container_width=True,
-                    height=min(320, 56 + 36 * len(pkgs)),
-                    hide_index=True,
-                )
+            st.markdown("##### diff_packages · since `" + str(diff_p.get("since", "HEAD~1")) + "`")
+            if diff_p.get("success") is False:
+                st.warning(diff_p.get("error", "diff_packages unavailable — is `demo-robot-workspace` a git repo?"))
             else:
-                st.info("No package table until `inspect_graph` is populated.")
+                st.metric("Changed packages", len(diff_p.get("changed_packages") or []))
+                st.metric("Changed ROS files", len(diff_p.get("changed_files") or []))
+                with st.expander("Changed files"):
+                    for f in (diff_p.get("changed_files") or [])[:80]:
+                        st.text(f)
+                with st.expander("Topic graph hints from diff"):
+                    st.json(diff_p.get("topic_changes") or {})
 
     elif page == "Fault Diagnosis":
         render_hero(
             "Fault diagnosis",
-            "Diagnostics timeline from the bag and a Groq-powered mission debrief for non-technical stakeholders.",
+            "MCP `parse_diagnostics` + `read_bag`, then Groq narrates a mission debrief (flight-recorder style).",
             status,
         )
         faults = diag.get("faults") or []
         col_left, col_right = st.columns((1.1, 1))
 
         with col_left:
-            st.markdown("##### Telemetry faults")
+            st.markdown("##### Telemetry faults (`parse_diagnostics`)")
             if faults:
                 df = pd.DataFrame(faults)
                 st.dataframe(df, use_container_width=True, height=340, hide_index=True)
@@ -346,7 +383,7 @@ def main() -> None:
     elif page == "Node Graph":
         render_hero(
             "Topic graph",
-            "Package-grouped publishers and subscribers from static `inspect_graph` (Mermaid).",
+            "MCP `inspect_graph` visualised: package-grouped publishers and subscribers (Mermaid).",
             status,
         )
         chart = topic_graph_mermaid(inspect)
@@ -358,7 +395,7 @@ def main() -> None:
     elif page == "Safety Review":
         render_hero(
             "Safety review",
-            "Paste Bob safety output, then ask Groq for a CTO-facing deployment summary.",
+            "Findings (Bob `ros2-safety-reviewer` or manual) + Groq CTO summary. Full IBM Bob session exports below for hackathon evidence.",
             status,
         )
         report = SAFETY_PATH.read_text(encoding="utf-8") if SAFETY_PATH.is_file() else DEFAULT_SAFETY_SNIPPET
@@ -373,12 +410,69 @@ def main() -> None:
         if "cto" in st.session_state:
             st.markdown(st.session_state["cto"])
         st.divider()
-        st.caption("Reference: `bobpilot-pack/.bob/rules-ros2-safety-reviewer/safety-checklist.md`")
+        st.caption("Checklist reference: `bobpilot-pack/.bob/rules-ros2-safety-reviewer/safety-checklist.md`")
+
+        session_files = list_session_markdowns()
+        if session_files:
+            st.markdown("### IBM Bob session reports")
+            st.caption(
+                "These findings came directly from Bob's safety reviewer mode — the full session export is below, "
+                "as required by the hackathon submission rules."
+            )
+            selected = st.selectbox("View exported Bob session:", [f.name for f in session_files])
+            selected_path = BOB_SESSIONS_DIR / selected
+            if selected_path.is_file() and _is_under_root(selected_path):
+                content = selected_path.read_text(encoding="utf-8")
+                with st.container(border=True):
+                    st.markdown(content)
+        else:
+            st.info("No `bob-sessions/*.md` yet — export IBM Bob sessions (e.g. ros2-safety-reviewer) to this folder.")
+
+    elif page == "Docs Generator":
+        render_hero(
+            "Docs generator",
+            "Bob `ros2-docs-architect` output in `docs/` and exported sessions in `bob-sessions/` — one tab per Markdown file.",
+            status,
+        )
+
+        st.markdown("##### Generated documentation (`docs/`)")
+        doc_files = list_docs_markdowns()
+        if doc_files:
+            st.caption(
+                "READMEs and package docs from IBM Bob ros2-docs-architect — pick a tab to read one file at a time."
+            )
+            doc_tabs = st.tabs([p.name for p in doc_files])
+            for tab, path in zip(doc_tabs, doc_files):
+                with tab:
+                    if path.is_file() and _is_under_root(path):
+                        with st.container(border=True):
+                            st.caption(str(path.relative_to(ROOT)))
+                            st.markdown(path.read_text(encoding="utf-8"))
+        else:
+            st.info("No `docs/*.md` yet — generate package READMEs with Bob docs-architect, then save them here.")
+
+        st.divider()
+        st.markdown("##### Bob session exports (`bob-sessions/`)")
+        st.caption(
+            "Each tab is one exported session (proof for the hackathon). "
+            "docs-architect sessions often align with generated `docs/` content above."
+        )
+        sess_files = list_session_markdowns()
+        if sess_files:
+            sess_tabs = st.tabs([p.name for p in sess_files])
+            for tab, path in zip(sess_tabs, sess_files):
+                with tab:
+                    if path.is_file() and _is_under_root(path):
+                        with st.container(border=True):
+                            st.caption(str(path.relative_to(ROOT)))
+                            st.markdown(path.read_text(encoding="utf-8"))
+        else:
+            st.info("No `bob-sessions/*.md` yet — export IBM Bob sessions to this folder.")
 
     else:
         render_hero(
             "Ask Bob",
-            "Quick Groq Q&A grounded in `inspect_graph` (trimmed context).",
+            "Live Groq Q&A with `inspect_graph` workspace context (not a substitute for IBM Bob in-IDE).",
             status,
         )
         ctx = json.dumps(inspect, indent=2, default=str)[:14000] if inspect else "No inspect_graph data."
