@@ -3,3 +3,9 @@ demo-robot-workspace/log/
 demo-robot-workspace/install/
 *.env
 *.sh.env
+demo-robot-workspace/build/
+demo-robot-workspace/log/
+demo-robot-workspace/install/
+*.env
+*.sh.env
+**/*.sh.env
