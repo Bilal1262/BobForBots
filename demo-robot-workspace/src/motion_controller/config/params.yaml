@@ -1,0 +1,4 @@
+motion_controller:
+  ros__parameters:
+    max_linear_vel: 0.3
+    max_angular_vel: 1.0

@@ -1,0 +1,4 @@
+safety_manager:
+  ros__parameters:
+    safety_timeout_sec: 0.5
+    publish_rate_hz: 10.0

@@ -1,0 +1,4 @@
+task_supervisor:
+  ros__parameters:
+    task_timeout_sec: 30.0
+    retry_count: 3

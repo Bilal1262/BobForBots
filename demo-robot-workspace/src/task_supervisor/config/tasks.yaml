@@ -1,0 +1,16 @@
+tasks:
+  - task_id: goto_A
+    task_type: navigate
+    goal_x: 1.0
+    goal_y: 0.5
+    timeout_sec: 30.0
+  - task_id: goto_B
+    task_type: navigate
+    goal_x: 2.0
+    goal_y: -0.25
+    timeout_sec: 30.0
+  - task_id: goto_C
+    task_type: navigate
+    goal_x: 0.0
+    goal_y: 0.0
+    timeout_sec: 30.0
