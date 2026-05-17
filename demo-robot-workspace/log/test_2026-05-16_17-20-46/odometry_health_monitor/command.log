@@ -1,2 +1,0 @@
-Invoking command in '/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace/src/odometry_health_monitor': PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -m unittest -v
-Invoked command in '/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace/src/odometry_health_monitor' returned '0': PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -m unittest -v

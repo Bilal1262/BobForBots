@@ -1,5 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000313] (odometry_health_monitor) JobQueued: {'identifier': 'odometry_health_monitor', 'dependencies': OrderedDict([('odometry_health_monitor', '/home/bb/hackathon/IBM/BobForBot/demo-robot-workspace/install/odometry_health_monitor')])}
-[0.001065] (odometry_health_monitor) JobStarted: {'identifier': 'odometry_health_monitor'}
-[0.015507] (odometry_health_monitor) JobEnded: {'identifier': 'odometry_health_monitor', 'rc': 1}
-[0.026286] (-) EventReactorShutdown: {}

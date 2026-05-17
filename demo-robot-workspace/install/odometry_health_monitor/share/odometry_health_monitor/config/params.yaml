@@ -1,4 +1,0 @@
-odometry_health_monitor:
-  ros__parameters:
-    odom_timeout_sec: 1.0
-    stop_on_timeout: true
